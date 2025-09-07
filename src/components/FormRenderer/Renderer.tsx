@@ -17,16 +17,27 @@ import {
 } from "react-hook-form";
 import { isRulesValid } from "./resolver";
 
+export type FormElementProps<AdditionalProps = object> = ControllerRenderProps<
+  FieldValues,
+  string
+> & {
+  element: Element;
+  error: boolean;
+  helperText?: string;
+} & AdditionalProps;
+
 export type FormRendererProps = {
   form: Form;
+  components?: Record<string, FC<FormElementProps>>;
 };
+
 const throwFormContextError = () => {
   throw new Error(
     "FormRenderer must be used within a FormProvider (imported from react-hook-form)"
   );
 };
 
-export const FormRenderer: FC<FormRendererProps> = ({ form }) => {
+export const FormRenderer: FC<FormRendererProps> = ({ form, components }) => {
   const formContext = useFormContext();
   if (!formContext) throwFormContextError();
   return (
@@ -50,6 +61,7 @@ export const FormRenderer: FC<FormRendererProps> = ({ form }) => {
                         key={element.id}
                         element={element}
                         field={field}
+                        customComponents={components}
                       />
                     );
                   }}
@@ -89,7 +101,8 @@ const useElementRuleValidation = (rules?: Rule[]) => {
 const ElementRenderer: FC<{
   element: Element;
   field: ControllerRenderProps<FieldValues, string>;
-}> = ({ element, field }) => {
+  customComponents: FormRendererProps["components"];
+}> = ({ element, field, customComponents }) => {
   const formContext = useFormContext();
   if (!formContext) throwFormContextError();
   const isVisible = useElementRuleValidation(element.rules);
@@ -119,7 +132,13 @@ const ElementRenderer: FC<{
         />
       );
     default:
-      return <div key={element.id}>Unknown element type: {element.type}</div>;
+      if (customComponents && customComponents[element.type]) {
+        const CustomComponent = customComponents[element.type];
+        return (
+          <CustomComponent key={element.id} element={element} {...fieldProps} />
+        );
+      }
+      return null;
   }
 };
 
