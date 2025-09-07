@@ -181,7 +181,7 @@ const CheckboxRenderer: FC<{
           {...element.props}
           {...fieldProps}
           onChange={handleChange}
-          value={choice.name}
+          value={choice.id}
           key={choice.id}
         />
       }

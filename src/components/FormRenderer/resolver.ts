@@ -4,8 +4,6 @@ import type { Condition, Form, Rule } from "../../types";
 import type { FieldValues } from "react-hook-form";
 import { get } from "es-toolkit/compat";
 
-
-
 export const isRulesValid = (data: FieldValues, rules: Rule[]) => {
   return rules
     ?.map((rule) => {
@@ -39,9 +37,9 @@ export const isConditionValid = (
     case "NOT_IN":
       return Array.isArray(actualValue) && !actualValue.includes(expectedValue);
     case "GREATER_THAN":
-      return +(actualValue as number) > +(expectedValue as number);
+      return actualValue && (actualValue as number) > +(expectedValue as number);
     case "LESS_THAN":
-      return +(actualValue as number) < +(expectedValue as number);
+      return actualValue && (actualValue as number) < +(expectedValue as number);
     default:
       return false;
   }
