@@ -5,7 +5,13 @@ export interface Form {
   elements: Element[][];
 }
 
-export type Element<Props = Record<string, unknown>> = {
+type DefaultProps = {
+  'error'?: boolean,
+  'helperText'?: string,
+  [key: string]: unknown
+}
+
+export type Element<Props = DefaultProps> = {
   id: string;
   label: string;
   type: 'text' | 'checkbox' | (string & {}),
