@@ -15,6 +15,7 @@ const router = createBrowserRouter([
     lazy: () => import("./pages/forms.$id"),
   },
   { path: "/forms/:id/edit", lazy: () => import("./pages/forms.$id.edit") },
+  { path: "/forms/raw", lazy: () => import("./pages/forms.raw") },
 ]);
 
 export default function App() {
