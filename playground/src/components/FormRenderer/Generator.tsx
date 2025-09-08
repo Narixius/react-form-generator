@@ -11,7 +11,14 @@ import {
   ElementGeneratorDialog,
 } from "./ElementGenerator";
 import type { Form, Element } from "react-rule-based-renderer/types";
-import { createContext, useContext, useMemo, useState, type FC } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type FC,
+} from "react";
 
 const FormGeneratorContext = createContext<{
   components: FormRendererProps["components"];
@@ -68,14 +75,22 @@ const FormGeneratorComponent: FC<
     ) as Form;
     formSchema.elements.forEach((row) => {
       row.forEach((element) => {
-        if (element.id === "first_name") {
-          console.log(element);
-        }
         element.props = element.props || {};
         element.props._rules = element.rules;
         element.rules = undefined;
       });
     });
+    if (!formSchema?.elements.length) {
+      formSchema.elements = [
+        [
+          {
+            id: "dummy-element",
+            type: "hidden",
+            label: "hidden",
+          },
+        ],
+      ];
+    }
     return formSchema;
   }, [props.fieldProps.value]);
 
@@ -127,7 +142,12 @@ const FormGeneratorComponent: FC<
         (_: Element, idx: number) => idx !== deletingElement.columnIndex
       );
       const updatedElements = [...currentElements];
+
       updatedElements[deletingElement.rowIndex] = updatedRow;
+
+      if (updatedElements[deletingElement.rowIndex].length === 0) {
+        updatedElements.splice(deletingElement.rowIndex, 1);
+      }
       props.fieldProps.onChange({
         ...props.fieldProps.value,
         elements: updatedElements,
@@ -224,17 +244,29 @@ const generatorComponents: FormRendererProps["components"] = {
 export type FormGeneratorProps = {
   defaultForm?: Form;
   components?: FormRendererProps["components"];
+  onUpdate?: (form: Form) => void;
 };
 
 export const FormGenerator: FC<FormGeneratorProps> = ({
   defaultForm,
   components,
+  onUpdate,
 }) => {
   const form = useForm<{ generatedForm: Form }>({
     defaultValues: {
       generatedForm: defaultForm,
     },
   });
+
+  const formState = useWatch({
+    control: form.control,
+    name: "generatedForm",
+  });
+
+  useEffect(() => {
+    onUpdate?.(formState);
+  }, [formState, onUpdate]);
+
   const generatedForm = useWatch({
     control: form.control,
     name: "generatedForm",

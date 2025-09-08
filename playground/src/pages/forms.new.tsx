@@ -1,13 +1,12 @@
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Suspense, useMemo, useState } from "react";
 import {
   Stack,
   CircularProgress,
   Button,
   Snackbar,
-  Typography,
+  TextField,
 } from "@mui/material";
-import { useParams } from "react-router";
 import type { Form } from "react-rule-based-renderer/types";
 import { ErrorBoundary } from "react-error-boundary";
 import { components } from "../components/FormRenderer/components";
@@ -34,29 +33,31 @@ export const Component = () => {
 };
 
 const FormFetcher = () => {
+  const [formName, setFormName] = useState<string>("");
+  const [formId, setFormId] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
-  const { id } = useParams<{ id: string }>();
   const [updatedForm, setUpdatedForm] = useState<Form | null>(null);
-  const { data: form } = useSuspenseQuery({
-    queryKey: ["get-form", id],
-    queryFn: () =>
-      fetch(`/api/forms/${id}`).then((res) => res.json()) as Promise<{
-        form: Form;
-      }>,
-  });
-
-  useEffect(() => {
-    setUpdatedForm(form.form);
-  }, [form]);
-
-  const { mutate: updateForm, isPending: isUpdating } = useMutation({
+  const defaultForm: Form = useMemo(() => {
+    return {
+      id: "new-form",
+      name: "New Form",
+      spacing: 2,
+      elements: [],
+    };
+  }, []);
+  const { mutate: createForm, isPending: isCreating } = useMutation({
     mutationFn() {
-      return fetch(`/api/forms/${id}`, {
-        method: "PUT",
+      return fetch(`/api/forms/`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedForm),
+        body: JSON.stringify({
+          id: formId,
+          name: formName,
+          spacing: 2,
+          elements: updatedForm?.elements,
+        }),
       })
         .then((res) => {
           if (!res.ok) {
@@ -66,7 +67,7 @@ const FormFetcher = () => {
         })
         .then(() => {
           console.log(JSON.stringify(updatedForm));
-          setMessage("Form updated successfully");
+          setMessage("Form created successfully");
           setTimeout(() => setMessage(null), 4000);
         });
     },
@@ -88,14 +89,27 @@ const FormFetcher = () => {
         onClose={() => setMessage(null)}
         message={message}
       />
-      <Typography variant="h4">{form.form.name}</Typography>
+      <Stack direction="row" spacing={2} width="100%">
+        <TextField
+          label="Form Name"
+          value={formName}
+          fullWidth
+          onChange={(e) => setFormName(e.target.value)}
+        />
+        <TextField
+          label="Form ID"
+          value={formId}
+          fullWidth
+          onChange={(e) => setFormId(e.target.value)}
+        />
+      </Stack>
       <Stack
         component="form"
-        spacing={form.form.spacing}
+        spacing={defaultForm.spacing}
         onSubmit={(e) => e.preventDefault()}
       >
         <FormGenerator
-          defaultForm={form.form}
+          defaultForm={defaultForm}
           components={components}
           onUpdate={(form) => setUpdatedForm(form)}
         />
@@ -104,8 +118,8 @@ const FormFetcher = () => {
           variant="contained"
           fullWidth
           size="large"
-          loading={isUpdating}
-          onClick={() => updateForm()}
+          loading={isCreating}
+          onClick={() => createForm()}
         >
           Save from
         </Button>

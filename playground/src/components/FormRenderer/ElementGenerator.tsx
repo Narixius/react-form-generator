@@ -78,6 +78,7 @@ export const ElementGenerator: FC<ElementGeneratorProps> = ({
   onAddToBottom,
   showAddOnBottom = false,
 }) => {
+  const isHiddenComponent = element?.type === "hidden";
   return (
     <Box
       sx={{
@@ -87,65 +88,67 @@ export const ElementGenerator: FC<ElementGeneratorProps> = ({
         paddingBottom: showAddOnBottom ? "30px" : undefined,
       }}
     >
-      <Card
-        sx={{
-          cursor: "pointer",
-          width: "100%",
-        }}
-        onClick={() => onUpdate(element!)}
-      >
-        <CardContent sx={{ padding: "12px !important" }}>
-          <Stack
-            direction="column"
-            justifyContent="space-between"
-            alignItems="start"
-          >
+      {!isHiddenComponent && (
+        <Card
+          sx={{
+            cursor: "pointer",
+            width: "100%",
+          }}
+          onClick={() => onUpdate(element!)}
+        >
+          <CardContent sx={{ padding: "12px !important" }}>
             <Stack
-              direction="row"
+              direction="column"
               justifyContent="space-between"
               alignItems="start"
-              width="100%"
             >
-              <Typography variant="h6" fontSize={"14px"} whiteSpace="nowrap">
-                {element?.label} {element?.required ? " *" : ""}
-              </Typography>
-              <Stack direction="row" spacing="1px" sx={{ mt: "-4px" }}>
-                <IconButton
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onUpdate?.(element!);
-                  }}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  color="error"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(element);
-                  }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="start"
+                width="100%"
+              >
+                <Typography variant="h6" fontSize={"14px"} whiteSpace="nowrap">
+                  {element?.label} {element?.required ? " *" : ""}
+                </Typography>
+                <Stack direction="row" spacing="1px" sx={{ mt: "-4px" }}>
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onUpdate?.(element!);
+                    }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(element);
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
               </Stack>
+              <Typography variant="caption" color="text.secondary">
+                {element?.type}
+                {!!(element?.props?._rules as Rule[])?.length && (
+                  <Chip
+                    label="Conditional Field"
+                    size="small"
+                    sx={{ ml: 1, scale: "0.8", translate: "-15px" }}
+                  />
+                )}
+              </Typography>
             </Stack>
-            <Typography variant="caption" color="text.secondary">
-              {element?.type}
-              {!!(element?.props?._rules as Rule[])?.length && (
-                <Chip
-                  label="Conditional Field"
-                  size="small"
-                  sx={{ ml: 1, scale: "0.8", translate: "-15px" }}
-                />
-              )}
-            </Typography>
-          </Stack>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
-      {showAddOnRight && (
+      {!isHiddenComponent && showAddOnRight && (
         <IconButton
           size="small"
           sx={{

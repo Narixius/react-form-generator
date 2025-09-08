@@ -84,19 +84,6 @@ export function makeServer({ environment = 'development' } = {}) {
         return new Response(204);
       });
 
-      this.patch('/forms/:id', (schema, request) => {
-        const id = request.params.id;
-        const attrs = JSON.parse(request.requestBody);
-
-        const form = schema.find('form', id);
-
-        if (!form) {
-          return new Response(404, {}, { error: 'Form not found' });
-        }
-
-        form.update(attrs);
-        return form;
-      });
     },
   });
 

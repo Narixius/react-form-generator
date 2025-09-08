@@ -7,6 +7,10 @@ const router = createBrowserRouter([
     lazy: () => import("./pages/index"),
   },
   {
+    path: "/forms/new",
+    lazy: () => import("./pages/forms.new"),
+  },
+  {
     path: "/forms/:id",
     lazy: () => import("./pages/forms.$id"),
   },
