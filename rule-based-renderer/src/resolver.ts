@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import type { Condition, Form, Rule } from "../../types";
+import type { Condition, Form, Rule } from "./types";
 import type { FieldValues } from "react-hook-form";
 import { get } from "es-toolkit/compat";
 

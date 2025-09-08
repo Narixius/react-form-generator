@@ -4,13 +4,13 @@ import {
   FormRenderer,
   type FormElementProps,
   type FormRendererProps,
-} from "./Renderer";
+} from "react-rule-based-renderer";
 import {
   ElementGenerator,
   ElementGeneratorDeleteDialog,
   ElementGeneratorDialog,
 } from "./ElementGenerator";
-import type { Form, Element } from "../../types";
+import type { Form, Element } from "react-rule-based-renderer/types";
 import { createContext, useContext, useMemo, useState, type FC } from "react";
 
 const FormGeneratorContext = createContext<{

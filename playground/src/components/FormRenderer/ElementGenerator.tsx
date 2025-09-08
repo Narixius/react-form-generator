@@ -37,8 +37,13 @@ import {
   Add as PlusIcon,
 } from "@mui/icons-material";
 import { useForm, Controller, useWatch, useFieldArray } from "react-hook-form";
-import type { Element, Choice, Rule, Condition } from "../../types";
-import type { FormRendererProps } from "./Renderer";
+import type {
+  Element,
+  Choice,
+  Rule,
+  Condition,
+} from "react-rule-based-renderer/types";
+import type { FormRendererProps } from "react-rule-based-renderer";
 
 interface ElementGeneratorProps {
   element?: Element;

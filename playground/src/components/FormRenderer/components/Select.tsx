@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { FormElementProps } from "../Renderer";
+import type { FormElementProps } from "react-rule-based-renderer";
 import {
   FormControl,
   FormHelperText,

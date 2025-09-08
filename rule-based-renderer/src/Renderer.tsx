@@ -6,7 +6,7 @@ import {
   type ChangeEvent,
   type FC,
 } from "react";
-import type { Element, Form, Rule } from "../../types";
+import type { Element, Form, Rule } from "./types";
 import {
   Checkbox,
   FormControl,
