@@ -17,7 +17,7 @@ export type Element<Props = DefaultProps> = {
   type: 'text' | 'checkbox' | (string & {}),
   required?: boolean;
   rules?: Rule[]
-  props?: Props,
+  props?: Props & DefaultProps,
   choices?: Choice[]
 }
 

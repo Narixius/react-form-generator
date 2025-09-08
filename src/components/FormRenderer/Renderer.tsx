@@ -7,7 +7,14 @@ import {
   type FC,
 } from "react";
 import type { Element, Form, Rule } from "../../types";
-import { Checkbox, FormControlLabel, Stack, TextField } from "@mui/material";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Stack,
+  TextField,
+} from "@mui/material";
 import {
   Controller,
   useFormContext,
@@ -17,18 +24,19 @@ import {
 } from "react-hook-form";
 import { isRulesValid } from "./resolver";
 
-export type FormElementProps<AdditionalProps = object> = ControllerRenderProps<
-  FieldValues,
-  string
-> & {
-  element: Element;
+export type FormElementProps<AdditionalProps = object> = {
+  fieldProps: ControllerRenderProps<FieldValues, string>;
+  element: Element<AdditionalProps>;
   error: boolean;
   helperText?: string;
-} & AdditionalProps;
+  rowIndex: number;
+  columnIndex: number;
+};
 
 export type FormRendererProps = {
   form: Form;
   components?: Record<string, FC<FormElementProps>>;
+  FallbackRenderer?: FC<FormElementProps>;
 };
 
 const throwFormContextError = () => {
@@ -37,7 +45,11 @@ const throwFormContextError = () => {
   );
 };
 
-export const FormRenderer: FC<FormRendererProps> = ({ form, components }) => {
+export const FormRenderer: FC<FormRendererProps> = ({
+  form,
+  components,
+  FallbackRenderer,
+}) => {
   const formContext = useFormContext();
   if (!formContext) throwFormContextError();
   return (
@@ -50,9 +62,10 @@ export const FormRenderer: FC<FormRendererProps> = ({ form, components }) => {
             sx={{ width: "100%" }}
             spacing={form.spacing}
           >
-            {row.map((element) => {
+            {row.map((element, columnIndex) => {
               return (
                 <Controller
+                  key={element.id}
                   control={formContext.control}
                   name={element.id}
                   render={({ field }) => {
@@ -62,6 +75,9 @@ export const FormRenderer: FC<FormRendererProps> = ({ form, components }) => {
                         element={element}
                         field={field}
                         customComponents={components}
+                        FallbackRenderer={FallbackRenderer}
+                        rowIndex={rowIndex}
+                        columnIndex={columnIndex}
                       />
                     );
                   }}
@@ -102,7 +118,17 @@ const ElementRenderer: FC<{
   element: Element;
   field: ControllerRenderProps<FieldValues, string>;
   customComponents: FormRendererProps["components"];
-}> = ({ element, field, customComponents }) => {
+  FallbackRenderer: FormRendererProps["FallbackRenderer"];
+  rowIndex: number;
+  columnIndex: number;
+}> = ({
+  element,
+  field,
+  customComponents,
+  FallbackRenderer,
+  rowIndex,
+  columnIndex,
+}) => {
   const formContext = useFormContext();
   if (!formContext) throwFormContextError();
   const isVisible = useElementRuleValidation(element.rules);
@@ -111,55 +137,55 @@ const ElementRenderer: FC<{
   const error = formContext.formState.errors[element.id];
   const fieldProps = {
     ...field,
+  };
+  const props = {
+    element: element,
+    rowIndex: rowIndex,
+    columnIndex: columnIndex,
+    fieldProps,
     error: !!error,
     helperText: error ? (error.message as string) : undefined,
   };
+  if (customComponents && customComponents[element.type]) {
+    const CustomComponent = customComponents[element.type];
+    return <CustomComponent {...props} />;
+  }
   switch (element.type) {
     case "text":
-      return (
-        <TextRenderer
-          key={element.id}
-          element={element}
-          fieldProps={fieldProps}
-        />
-      );
+      return <TextRenderer {...props} />;
     case "checkbox":
-      return (
-        <CheckboxRenderer
-          key={element.id}
-          element={element}
-          fieldProps={fieldProps}
-        />
-      );
+      return <CheckboxRenderer {...props} />;
     default:
-      if (customComponents && customComponents[element.type]) {
-        const CustomComponent = customComponents[element.type];
-        return (
-          <CustomComponent key={element.id} element={element} {...fieldProps} />
-        );
-      }
+      if (FallbackRenderer) return <FallbackRenderer {...props} />;
       return null;
   }
 };
 
-const TextRenderer: FC<{
-  element: Element;
-  fieldProps: ControllerRenderProps<FieldValues, string>;
-}> = ({ element, fieldProps }) => {
+const TextRenderer: FC<FormElementProps> = ({
+  element,
+  fieldProps,
+  helperText,
+  error,
+}) => {
   return (
     <TextField
       label={element.label}
-      {...element.props}
       sx={{ width: "100%" }}
+      error={error}
+      helperText={helperText}
+      required={element.required}
+      {...element.props}
       {...fieldProps}
     />
   );
 };
 
-const CheckboxRenderer: FC<{
-  element: Element;
-  fieldProps: ControllerRenderProps<FieldValues, string>;
-}> = ({ element, fieldProps }) => {
+const CheckboxRenderer: FC<FormElementProps> = ({
+  element,
+  fieldProps,
+  error,
+  helperText,
+}) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, checked: boolean) => {
       const { value = [] } = fieldProps;
@@ -175,18 +201,23 @@ const CheckboxRenderer: FC<{
     [fieldProps]
   );
   return element.choices?.map((choice) => (
-    <FormControlLabel
-      control={
-        <Checkbox
-          {...element.props}
-          {...fieldProps}
-          onChange={handleChange}
-          value={choice.id}
-          key={choice.id}
-        />
-      }
-      sx={{ width: "100%" }}
-      label={element.label}
-    />
+    <FormControl error={error} required={element.required}>
+      <FormControlLabel
+        key={choice.id}
+        control={
+          <Checkbox
+            {...element.props}
+            {...fieldProps}
+            required={element.required}
+            onChange={handleChange}
+            value={choice.id}
+            key={choice.id}
+          />
+        }
+        sx={{ width: "100%" }}
+        label={element.label}
+      />
+      <FormHelperText>{helperText}</FormHelperText>
+    </FormControl>
   ));
 };
