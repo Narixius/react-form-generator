@@ -82,6 +82,7 @@ The `rule-based-renderer` package developed as an standalone library.
 ## Minimal Usage Example
 ```tsx
 import { FormRenderer } from 'react-rule-based-renderer';
+import { getFormResolver } from 'react-rule-based-renderer/resolver';
 import { FormProvider, useForm } from 'react-hook-form';
 
 const form = {
@@ -94,11 +95,17 @@ const form = {
 };
 
 export function Demo() {
-	const methods = useForm();
+	const form = useForm({
+    resolver: getFormResolver(form)
+  });
+
 	return (
-		<FormProvider {...methods}>
-			<FormRenderer form={form} components={components} />
-		</FormProvider>
+		<form onSubmit={form.handleSubmit(console.log)}>
+      <FormProvider {...methods}>
+			  <FormRenderer form={form} components={components} />
+		  </FormProvider>
+      <button type="submit">Submit</button>
+    </form>
 	);
 }
 ```
