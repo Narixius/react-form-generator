@@ -16,12 +16,17 @@
     "@hookform/resolvers": "^5.2.1",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
+    "@tanstack/react-query": "^5.87.1",
     "es-toolkit": "^1.39.10",
+    "miragejs": "^0.1.48",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.62.0",
+    "react-router": "^7.8.2",
+    "react-rule-based-renderer": "workspace:*",
     "yup": "^1.7.0",
-    "react-rule-based-renderer": "workspace:*"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

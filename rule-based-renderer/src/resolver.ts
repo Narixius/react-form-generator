@@ -47,22 +47,25 @@ export const isConditionValid = (
 
 export const getFormResolver = (form: Form) => {
   const resolver: ReturnType<typeof yupResolver> = (data, ctx, options) => {
-    const shape: Record<string, yup.StringSchema | yup.BooleanSchema | yup.MixedSchema> = {};
+    const shape: Record<string, yup.Schema> = {};
     form.elements.flat().forEach((element) => {
       const isFieldVisible = !element.rules || isRulesValid(data, element.rules);
       if (isFieldVisible) {
         // before generating the validator, check if the field is not hidden by any rule
-        let validator: yup.StringSchema | yup.BooleanSchema | yup.MixedSchema = yup.string();
+        let validator: yup.Schema = yup.string();
         if (element.type === "text") {
           validator = yup.string();
           if (element.required) {
             validator = validator.required("This field is required")
           }
-        } else if (element.type === "checkbox") {
-          validator = yup.boolean();
-          if (element.required) {
-            validator = validator.oneOf([true], "This field must be checked");
-          }
+        } else if (element.type === "checkbox" && element.required) {
+          const allowed = element.choices?.map((c) => c.id) || [];
+          validator = yup.array().of(yup.string().oneOf(allowed))
+            .test(
+              "must-contain-one",
+              `This field must be checked`,
+              (arr) => arr?.some((item) => item && allowed.includes(item)) ?? false
+            )
         } else {
           validator = yup.mixed();
           if (element.required) {

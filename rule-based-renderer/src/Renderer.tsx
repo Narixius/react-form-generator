@@ -170,11 +170,10 @@ const TextRenderer: FC<FormElementProps> = ({
 }) => {
   return (
     <TextField
-      label={element.label}
+      label={element.label + (element.required ? " *" : "")}
       sx={{ width: "100%" }}
       error={error}
       helperText={helperText}
-      required={element.required}
       {...element.props}
       {...fieldProps}
     />
@@ -209,7 +208,6 @@ const CheckboxRenderer: FC<FormElementProps> = ({
           <Checkbox
             {...element.props}
             {...fieldProps}
-            required={element.required}
             onChange={handleChange}
             value={choice.id}
             key={choice.id}
