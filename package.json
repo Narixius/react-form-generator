@@ -8,6 +8,11 @@
     "renderer",
     "rule-based"
   ],
+  "scripts": {
+    "dev": "pnpm -r  --parallel dev",
+    "build": "pnpm -r build",
+    "start": "pnpm -r --filter './playground' run start"
+  },
   "author": "Nairman Movaffaghi",
   "license": "MIT",
   "packageManager": "pnpm@10.6.3"
