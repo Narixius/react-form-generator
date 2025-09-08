@@ -6,6 +6,7 @@ import {
   Button,
   Snackbar,
   TextField,
+  Typography,
 } from "@mui/material";
 import type { Form } from "react-rule-based-renderer/types";
 import { ErrorBoundary } from "react-error-boundary";
@@ -93,6 +94,7 @@ const FormFetcher = () => {
         onClose={() => setMessage(null)}
         message={message}
       />
+      <Typography variant="h6">New form</Typography>
       <Stack direction="row" spacing={2} width="100%">
         <TextField
           label="Form Name"

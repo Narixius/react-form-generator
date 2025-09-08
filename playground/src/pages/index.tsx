@@ -29,12 +29,15 @@ export const Component = () => {
   return (
     <Stack maxWidth={800} margin="0 auto" padding={2} gap={2}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6" fontWeight="bold">
-          Forms list
-        </Typography>
-        <Link to="/forms/new">
-          <Button variant="contained">New form</Button>
-        </Link>
+        <Typography variant="h6">Forms list</Typography>
+        <Stack direction="row" spacing={2}>
+          <Link to="/forms/raw">
+            <Button variant="outlined">Raw editor</Button>
+          </Link>
+          <Link to="/forms/new">
+            <Button variant="contained">New form</Button>
+          </Link>
+        </Stack>
       </Stack>
       <Suspense
         fallback={

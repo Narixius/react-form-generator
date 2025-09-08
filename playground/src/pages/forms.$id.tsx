@@ -74,7 +74,7 @@ const FormFetcher = () => {
         onClose={() => setMessage(null)}
         message={message}
       />
-      <Typography variant="h4">{form.form.name}</Typography>
+      <Typography variant="h6">{form.form.name}</Typography>
       <Stack
         component="form"
         onSubmit={hookForm.handleSubmit(handleSubmit)}
