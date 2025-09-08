@@ -10,17 +10,17 @@
 [x] Validation
 
 ### Data Persistence
-- Use local storage or a mocked API (MirageJS) to save and retrieve created forms.
-- Forms should be loadable for editing and re-rendering.
+[x] Use local storage or a mocked API (MirageJS) to save and retrieve created forms.
+[x] Forms should be loadable for editing and re-rendering.
 
 # Bonus Points
 [x] Strong typing throughout the application.
 [x] Support multiple conditions using AND/OR logic or nested conditions.
-- Break down your application into small, reusable components.
-- Avoid large monolithic files.
-- Provide a build script.
+[x] Break down your application into small, reusable components.
+[x] Avoid large monolithic files.
+[x] Provide a build script.
 - Testing (vitest)
-- Deploy project somewhere
+[x] Deploy project somewhere
 
 
 Readability, maintainability, and modular design.
