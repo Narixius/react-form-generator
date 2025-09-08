@@ -7,7 +7,7 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type { Form } from "react-rule-based-renderer/types";
 import { ErrorBoundary } from "react-error-boundary";
 import { components } from "../components/FormRenderer/components";
@@ -48,7 +48,7 @@ const FormFetcher = () => {
   useEffect(() => {
     setUpdatedForm(form.form);
   }, [form]);
-
+  const navigate = useNavigate();
   const { mutate: updateForm, isPending: isUpdating } = useMutation({
     mutationFn() {
       return fetch(`/api/forms/${id}`, {
@@ -67,7 +67,9 @@ const FormFetcher = () => {
         .then(() => {
           console.log(JSON.stringify(updatedForm));
           setMessage("Form updated successfully");
-          setTimeout(() => setMessage(null), 4000);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         });
     },
   });

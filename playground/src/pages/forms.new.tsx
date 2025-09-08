@@ -11,6 +11,7 @@ import type { Form } from "react-rule-based-renderer/types";
 import { ErrorBoundary } from "react-error-boundary";
 import { components } from "../components/FormRenderer/components";
 import { FormGenerator } from "../components/FormRenderer/Generator";
+import { useNavigate } from "react-router";
 
 export const Component = () => {
   return (
@@ -45,6 +46,7 @@ const FormFetcher = () => {
       elements: [],
     };
   }, []);
+  const navigate = useNavigate();
   const { mutate: createForm, isPending: isCreating } = useMutation({
     mutationFn() {
       return fetch(`/api/forms/`, {
@@ -68,7 +70,9 @@ const FormFetcher = () => {
         .then(() => {
           console.log(JSON.stringify(updatedForm));
           setMessage("Form created successfully");
-          setTimeout(() => setMessage(null), 4000);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         });
     },
   });
