@@ -96,16 +96,16 @@ const form = {
 
 export function Demo() {
 	const form = useForm({
-    resolver: getFormResolver(form)
-  });
+		resolver: getFormResolver(form)
+	});
 
 	return (
 		<form onSubmit={form.handleSubmit(console.log)}>
-      <FormProvider {...methods}>
-			  <FormRenderer form={form} components={components} />
-		  </FormProvider>
-      <button type="submit">Submit</button>
-    </form>
+			<FormProvider {...methods}>
+				<FormRenderer form={form} components={components} />
+			</FormProvider>
+			<button type="submit">Submit</button>
+		</form>
 	);
 }
 ```
