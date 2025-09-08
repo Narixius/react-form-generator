@@ -106,7 +106,7 @@ export const seedForm = (server: Server) => {
             {
               operation: "AND",
               conditions: [
-                { elementId: "relocate", operator: "IN", value: "yes" },
+                { elementId: "relocate", operator: "INCLUDES", value: "yes" },
               ],
             },
           ],
@@ -187,7 +187,7 @@ export const seedForm = (server: Server) => {
             {
               operation: "AND",
               conditions: [
-                { elementId: "have_reference", operator: "IN", value: "yes" },
+                { elementId: "have_reference", operator: "INCLUDES", value: "yes" },
               ],
             },
           ],
@@ -202,7 +202,7 @@ export const seedForm = (server: Server) => {
             {
               operation: "AND",
               conditions: [
-                { elementId: "have_reference", operator: "IN", value: "yes" },
+                { elementId: "have_reference", operator: "INCLUDES", value: "yes" },
               ],
             },
           ],

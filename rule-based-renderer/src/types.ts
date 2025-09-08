@@ -32,6 +32,6 @@ export interface Rule {
 }
 export interface Condition {
   elementId: string;
-  operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | "GREATER_THAN" | "LESS_THAN";
+  operator: 'EQUALS' | 'NOT_EQUALS' | 'INCLUDES' | 'NOT_INCLUDES' | "GREATER_THAN" | "LESS_THAN";
   value: unknown;
 }

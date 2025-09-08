@@ -212,8 +212,8 @@ export const ElementGeneratorDeleteDialog: FC<
 const operators = [
   { value: "EQUALS", label: "Equals" },
   { value: "NOT_EQUALS", label: "Not Equals" },
-  { value: "IN", label: "In" },
-  { value: "NOT_IN", label: "Not In" },
+  { value: "INCLUDES", label: "Includes" },
+  { value: "NOT_INCLUDES", label: "Not Includes" },
   { value: "GREATER_THAN", label: "Greater Than" },
   { value: "LESS_THAN", label: "Less Than" },
 ];
@@ -604,8 +604,8 @@ export const ElementGeneratorDialog: FC<
                                               operator: e.target.value as
                                                 | "EQUALS"
                                                 | "NOT_EQUALS"
-                                                | "IN"
-                                                | "NOT_IN"
+                                                | "INCLUDES"
+                                                | "NOT_INCLUDES"
                                                 | "GREATER_THAN"
                                                 | "LESS_THAN",
                                             }

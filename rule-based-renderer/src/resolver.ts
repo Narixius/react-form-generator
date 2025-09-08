@@ -32,9 +32,9 @@ export const isConditionValid = (
       return actualValue === expectedValue;
     case "NOT_EQUALS":
       return actualValue !== expectedValue;
-    case "IN":
+    case "INCLUDES":
       return Array.isArray(actualValue) && actualValue.includes(expectedValue);
-    case "NOT_IN":
+    case "NOT_INCLUDES":
       return Array.isArray(actualValue) && !actualValue.includes(expectedValue);
     case "GREATER_THAN":
       return actualValue && (actualValue as number) > +(expectedValue as number);
