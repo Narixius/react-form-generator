@@ -5,19 +5,19 @@ export interface Form {
   elements: Element[][];
 }
 
-type DefaultProps = {
-  'error'?: boolean,
-  'helperText'?: string,
-  [key: string]: unknown
-}
+export interface DefaultElementProps {
+  error?: boolean;
+  helperText?: string;
+  [key: string]: unknown;
+};
 
-export type Element<Props = DefaultProps> = {
+export type Element<Props = DefaultElementProps> = {
   id: string;
   label: string;
   type: 'text' | 'checkbox' | (string & {}),
   required?: boolean;
   rules?: Rule[]
-  props?: Props & DefaultProps,
+  props?: Props & DefaultElementProps,
   choices?: Choice[]
 }
 

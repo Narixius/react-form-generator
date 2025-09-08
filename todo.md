@@ -1,7 +1,7 @@
 ## tasks
 ### Form Creation UI
-- Create a new form.
-- Add elements (e.g., text, checkbox).
+[x] Create a new form.
+[x] Add elements (e.g., text, checkbox).
 
 ### Form Rendering UI
 [x] Takes the form schema.

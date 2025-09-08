@@ -24,7 +24,8 @@ import {
 } from "react-hook-form";
 import { isRulesValid } from "./resolver";
 
-export type FormElementProps<AdditionalProps = object> = {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type FormElementProps<AdditionalProps = {}> = {
   fieldProps: ControllerRenderProps<FieldValues, string>;
   element: Element<AdditionalProps>;
   error: boolean;
