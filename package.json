@@ -9,7 +9,7 @@
     "rule-based"
   ],
   "scripts": {
-    "dev": "pnpm -r  --parallel dev",
+    "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
     "start": "pnpm -r --filter './playground' run start",
     "test": "pnpm -r --filter './rule-based-renderer' run test"
